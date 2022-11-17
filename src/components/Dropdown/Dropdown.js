@@ -1,7 +1,7 @@
 import React from 'react';
 import './Dropdown.css';
 import { FaCaretDown, FaCaretUp, FaRegSquare, FaRegCheckSquare, FaTimes } from 'react-icons/fa'
-const Dropdown = ({ items, isSingleSelect }) => {
+const Dropdown = ({ name, items, isSingleSelect }) => {
   const [open, setOpen] = React.useState(false);
   const [selections, setSelections] = React.useState(new Set()); // stores the index of selected items 
 
@@ -11,29 +11,32 @@ const Dropdown = ({ items, isSingleSelect }) => {
 
   const addSelection = (i) => {
     var newSelections;
+
     // need to clear selections if single select dropdown
-    if (isSingleSelect) {
-      newSelections = new Set()
-      // close the dropdown when selection is made
-      handleClick();
-    }
-    else {
-      newSelections = new Set(selections);
-    }
+    isSingleSelect ? newSelections = new Set() : newSelections = new Set(selections);
     newSelections.add(i)
     setSelections(newSelections)
+
+    if (isSingleSelect)
+      handleClick(); // close the dropdown when selection is made
   };
 
   const removeSelection = (i) => {
     var newSelections;
-    if (isSingleSelect) {
-      newSelections = new Set()
-    }
-    else {
-      newSelections = new Set(selections)
-      newSelections.delete(i)
-    }
+    isSingleSelect ? newSelections = new Set() : newSelections = new Set(selections);
+    newSelections.delete(i)
     setSelections(newSelections);
+  };
+
+  const addAll = () => {
+    var newSelections = new Set()
+    for (let i = 0; i < items.length; i++)
+      newSelections.add(i)
+    setSelections(newSelections);
+  };
+
+  const removeAll = () => {
+    setSelections(new Set());
   };
 
   return (
@@ -47,7 +50,7 @@ const Dropdown = ({ items, isSingleSelect }) => {
               <div className='dropdown-selection-list-item-close icon'><FaTimes /></div>
             </button>
           )))
-        ) : <div className='dropdown-selection-placeholder'> Select </div>}
+        ) : <div className='dropdown-selection-placeholder'> {name || "Select"}</div>}
         </div>
 
         {/*  caret icon */}
@@ -58,19 +61,28 @@ const Dropdown = ({ items, isSingleSelect }) => {
 
       {/* if dropdown is open, display dropdown list items */}
       {open && (<div className="dropdown-list">
-        {/* {selections.size == 0 ? (
-          <button className="dropdown-list-item">Select All</button>
-        ) : (
-          <button className="dropdown-list-item">Deselect All</button>
-        )} */}
+        {/* select or deselect all */}
+        {selections.size == 0 && !isSingleSelect && (
+          <button className="dropdown-list-item" onClick={addAll}>
+            <div className="dropdown-list-item-icon icon"><FaRegSquare /></div>
+            <em> Select All</em>
+          </button>
+        )}
+        {selections.size > 0 && !isSingleSelect && (
+          <button className="dropdown-list-item" onClick={removeAll}>
+            <div className="dropdown-list-item-icon icon"><FaRegCheckSquare /></div>
+            <em> Deselect All</em>
+          </button>
+        )}
 
+        {/* display list items */}
         {items.map((item, i) => (
           isSingleSelect ? (
             // single selection (no checkbox displayed, no "click to remove")
             <button className="dropdown-list-item" key={i} onClick={() => addSelection(i)}>
               {item}
             </button>
-          ) : (
+          ) :
             selections.has(i) ? (
               // multiselection and the item is selected, so clicking on it removes the selection
               <button className="dropdown-list-item" key={i} onClick={() => removeSelection(i)}>
@@ -83,8 +95,7 @@ const Dropdown = ({ items, isSingleSelect }) => {
                 <div className="dropdown-list-item-icon icon"><FaRegSquare /></div>
                 {item}
               </button>
-            )
-          )))
+            )))
         }
       </div>)}
     </div>

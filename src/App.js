@@ -8,10 +8,8 @@ function App() {
 
   return (
     <div className="App">
-      {/* <header className="App-header">
-      </header> */}
-      <Dropdown items={items1} isSingleSelect={true}></Dropdown>
-      <Dropdown items={items2} isSingleSelect={false}></Dropdown>
+      <Dropdown name="Lunch Order" items={items1} isSingleSelect={true}></Dropdown>
+      <Dropdown name="Sauces" items={items2} isSingleSelect={false}></Dropdown>
     </div>
   );
 }

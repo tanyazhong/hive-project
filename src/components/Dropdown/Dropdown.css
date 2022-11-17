@@ -20,7 +20,7 @@
 }
 
 .dropdown-button-caret {
-    margin: 6px 10px 2px 2px;
+    margin: 0px 10px 0px 0px;
 }
 
 .dropdown-selection-list {
@@ -41,7 +41,7 @@
     border: 1px solid gray;
     border-radius: 25px;
     margin: 3px;
-    padding: 6px 10px 6px 10px;
+    padding: 5px 10px 5px 10px;
     font-size: xx-small;
     color:#5A5A5A;
 }
