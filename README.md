@@ -1,3 +1,6 @@
+# About the Project
+This project was developed for the Hive takehome assessment. It is a custom dropdown menu component.
+
 # Running the Project
 
 The project may be viewed using the following commands:
